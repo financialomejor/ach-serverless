@@ -1,6 +1,8 @@
 # AWS Serverless ACH Service
 
-This project connects to the ACH service in development enviroment, to enable online payments.
+This project connects to the ACH service to enable online payments using serverless through a proxy.
+
+![keystore](./screenshots/ACHArchitecture.png 'Keystore configuration with keypair and ACH certificate')
 
 ## Prerrequisites
 
