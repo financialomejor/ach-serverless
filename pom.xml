@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.financialomejor</groupId>
-	<artifactId>ach.service</artifactId>
+	<artifactId>ach.serverless</artifactId>
 	<version>0.0.1</version>
-	<name>fm-ach-service-dev</name>
+	<name>fm-ach-serverless</name>
 	<packaging>jar</packaging>
 	<description>Project to connect ACH API</description>
 
