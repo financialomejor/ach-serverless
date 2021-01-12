@@ -7,17 +7,40 @@ This project connects to the ACH service to enable online payments using serverl
 ## Prerrequisites
 
 - VPN Site to Site setup
-- EC2 instance
-  - Deployed within the VPC attached to the VPN
-  - Reverse proxy configured with tinyproxy, pointing to the service IP
-  - IP Whitelist configured in /etc/tinyproxy/tinyproxy.conf
+- VPC with public and private networks with the architecture mentioned in <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario2.html">here</a>
 - Eclipse
   - Springboot tools installed in the marketplace
   - Maven installed
   - Setup Axis2 as instructed <a href="https://www.adictosaltrabajo.com/2008/10/24/web-services-axis-2/">here</a>
 - Serverless Framework, follow the intructions <a href="https://www.serverless.com/framework/docs/getting-started/">here</a>.
 
-## Installation
+## Tinyproxy Setup
+
+To bridge requests between your Lambda service and the ACH services, you must setup an EC2 instance as follows:
+
+1. Deploy an Ubuntu 20.x EC2 instance within the network that has the VPN
+2. SSH into the created instance
+3. Install tinyproxy as follows
+
+```bash
+sudo apt-get install tinyproxy
+```
+
+4. Copy and paste the **tinyproxy > tinyproxy.conf** file into the **/etc/tinyproxy/tinyproxy.conf** file. Be sure to replace the annotated parameters with your own values.
+
+5. Restart the service
+
+```bash
+sudo systemctl restart tinyproxy.service
+```
+
+If you need to access the tinyproxy logs in order to ensure that the service is working as expected, you can execute the following command:
+
+```bash
+sudo cat /var/log/tinyproxy/tinyproxy.log
+```
+
+## Project Setup
 
 First you need to clean the project using these commands:
 
@@ -55,11 +78,11 @@ After this, you need to generate a keystore in JKS format using any tool. We rec
 openssl rsa -aes256 -in your.key -out your.encrypted.key
 ```
 
-After generating the keystore you need to place it in the <strong>src > main > resources > certificate</strong> folder. Then update the configurations lying in the <strong>src > main > resources > policies.xml</strong> and <strong>com.financialomejor.ach.ACHMainController</strong> files, which are marked with the <strong>TODO</strong> comment. You also have to specify the private key password in the <strong>com.financialomejor.ach.PWCBHandler</strong> class.
+After generating the keystore you need to place it in the <strong>src > main > resources > certificate</strong> folder. Then update the configurations lying in the <strong>src > main > resources > policies.xml</strong> and <strong>com.financialomejor.ach.ACHMainController</strong> files, which are marked with the <strong>TODO</strong> annotation. You also have to specify the private key password in the <strong>com.financialomejor.ach.PWCBHandler</strong> class.
 
 ## Running the code
 
-To run the springboot service be sure that the <strong>spring-boot-starter-web</strong> dependency has the exclusions commented as follows:
+To run the springboot service locally be sure that the <strong>spring-boot-starter-web</strong> dependency has the exclusions commented as follows:
 
 ```xml
 <dependency>
@@ -79,6 +102,8 @@ To run the springboot service be sure that the <strong>spring-boot-starter-web</
 
 Then right click the project folder and choose the <strong>"Run As > Spring Boot App"</strong>. If all configurations where done properly the console must show the running project.
 
+<strong> Be sure that the tinyproxy service running on the EC2 instance allows the connections from your IP.</strong>
+
 ## Build
 
 After the project is configured, you need to install the dependencies and build the project. For this you need to execute the following command:
@@ -87,11 +112,11 @@ After the project is configured, you need to install the dependencies and build 
 mvn clean install package -P assembly-zip
 ```
 
-This will generate a ZIP file inside the <strong>target/</strong> folder. This zip is ready to be uploaded to a AWS Lambda Function.
+This will generate a ZIP file inside the <strong>target/</strong> folder. This zip is ready to be deployed using the Serverless Framework.
 
 ## Deploy
 
-To deploy the serverless application to your AWS account you should run the following commands:
+To deploy the serverless application to your AWS account you need to first edit the <strong>serverless.yml</strong> file with your AWS parameters. Then you should run the following commands:
 
 ```bash
 npm i

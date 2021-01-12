@@ -18,27 +18,35 @@ custom:
   customDomain: ${self:custom.domains.${opt:stage,'dev'}}
   domains:
     dev:
+      # TODO: replace with your custom domain name
       domainName: '<DEV_DOMAIN_NAME>'
+      # TODO: replace with your ACM certificate name
       certificateName: '<DEV_CERTIFICATE_NAME>'
       basePath: 'ach'
       stage: dev
       createRoute53Record: true
     prod:
+      # TODO: replace with your custom domain name
       domainName: '<PROD_DOMAIN_NAME>'
+      # TODO: replace with your ACM certificate name
       certificateName: '<PROD_CERTIFICATE_NAME>'
       basePath: 'ach'
       stage: prod
       createRoute53Record: true
   subnetIds:
     dev:
-      - <DEV_SUBNET>
+      # TODO: replace with your develop subnet id
+      - <DEV_PRIVATE_SUBNET>
     prod:
-      - <PROD_SUBNET>
+      # TODO: replace with your production subnet id
+      - <PROD_PRIVATE_SUBNET>
   securityGroupIds:
     dev:
-      - sg-016d032b81a8f8805
+      # TODO: replace with your develop security group id
+      - <SECURITY_GROUP_ID>
     prod:
-      - sg-0c300e927bdc33eaa
+      # TODO: replace with your production security group id
+      - <SECURITY_GROUP_ID>
 
 functions:
   achServices:
