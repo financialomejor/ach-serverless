@@ -107,14 +107,14 @@ curl http://localhost/ach/test
 The allowed routes by the service are the following:
 
 | Route                                    | Method | Description                                                |
-| ---------------------------------------- | ------ | ---------------------------------------------------------- | --- |
+| ---------------------------------------- | ------ | ---------------------------------------------------------- |
 | /ach/test                                | GET    | Testing route to check running service                     |
 | /ach/bank-list                           | GET    | Retrieves the bank list from the ACH servers               |
 | /ach/transaction-payment                 | POST   | Creates a new payment transaction                          |
 | /ach/transaction-information/{id}        | GET    | Retrieves the information for a given transaction          |
-| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |     |
+| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |
 | /ach/finalize-transaction/{id}           | POST   | Ends a given transaction                                   |
-| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |     |
+| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |
 
 <br/>
 
