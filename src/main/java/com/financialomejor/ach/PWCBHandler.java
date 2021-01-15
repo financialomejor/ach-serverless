@@ -15,7 +15,7 @@ public class PWCBHandler implements CallbackHandler {
         for (int i = 0; i < callbacks.length; i++) {
             WSPasswordCallback pwcb = (WSPasswordCallback)callbacks[i];
             // TODO: Set the private key password
-            pwcb.setPassword("YOUR_PRIVATE_KEY_PASSWORD");
+            pwcb.setPassword(System.getenv("PRIVATE_KEY_PSSWD"));
         }
     }
 

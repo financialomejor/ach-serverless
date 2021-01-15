@@ -42,29 +42,11 @@ sudo cat /var/log/tinyproxy/tinyproxy.log
 
 ## Project Setup
 
-First you need to clean the project using these commands:
+First you need to clean the project and install the maven dependencies using the following command:
 
 ```bash
-mvn clean
+mvn clean install
 ```
-
-After this you need to replace the WSDL ip target under the name of <strong>"ACH_SERVICE_URL"</strong> in the <strong>"src > main> resources > services.wsdl"</strong> file with the tinyproxy IP and port. Then, you can generate the Java classes from the WSDL definition using the following command:
-
-<!-- $ sed -i -e 's/ACH_SERVICE_URL/xxx.xxx.xxx.xxx/g' /tmp/file.txt -->
-
-```bash
-mvn org.apache.axis2:axis2-wsdl2code-maven-plugin:1.7.9:wsdl2code
-```
-
-<!-- The first command intends to replace the "ACH_SERVICE_URL" placeholder for the ip that hosts the ACH service.
-
-<h3>Note: <strong>If you are using Windows you can do this change manually at the end of the "src/main/resources/service.wsdl" file.</strong></h3>
-
-<br> -->
-
-Then you have to reference the generated code directory as a source code directory, if the sources don't show in the project explorer. An example is shown in the following image.
-
-![generated-code-config](https://www.adictosaltrabajo.com/wp-content/uploads/tutorial-data/wss_usertoken/sourceFolder.jpg 'Generated code configuration to access it in project')
 
 ### Keystore
 
@@ -78,9 +60,9 @@ After this, you need to generate a keystore in JKS format using any tool. We rec
 openssl rsa -aes256 -in your.key -out your.encrypted.key
 ```
 
-After generating the keystore you need to place it in the <strong>src > main > resources > certificate</strong> folder. Then update the configurations lying in the <strong>src > main > resources > policies.xml</strong> and <strong>com.financialomejor.ach.ACHMainController</strong> files, which are marked with the <strong>TODO</strong> annotation. You also have to specify the private key password in the <strong>com.financialomejor.ach.PWCBHandler</strong> class.
+After generating the keystore you need to place it in the <strong>src > main > resources > certificate</strong> folder. Then update the configurations lying in the <strong>src > main > resources > policies.xml</strong> file, which are marked with the <strong>TODO</strong> annotation.
 
-## Running the code
+## Running the project
 
 To run the springboot service locally be sure that the <strong>spring-boot-starter-web</strong> dependency has the exclusions commented as follows:
 
@@ -99,6 +81,16 @@ To run the springboot service locally be sure that the <strong>spring-boot-start
   -->
 </dependency>
 ```
+
+Then configure the following environment variables in your Eclipse run configurations:
+
+| Name              | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| TINYPROXY_HOST    | The url of the tinyproxy reverse proxy endpoint |
+| NIT               | The NIT of the organization                     |
+| PRIVATE_KEY_PSSWD | The password of the private key of the keystore |
+
+<br/>
 
 Then right click the project folder and choose the <strong>"Run As > Spring Boot App"</strong>. If all configurations where done properly the console must show the running project.
 

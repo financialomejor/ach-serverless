@@ -60,14 +60,14 @@ public class MainServicesImplStub extends org.apache.axis2.client.Stub {
         org.apache.axis2.context.ConfigurationContext configurationContext)
         throws org.apache.axis2.AxisFault {
         this(configurationContext,
-            "http://54.91.225.251:8888/PSEWebServices3/mainservices.asmx");
+        		System.getenv("TINYPROXY_HOST")+"/PSEWebServices3/mainservices.asmx");
     }
 
     /**
      * Default Constructor
      */
     public MainServicesImplStub() throws org.apache.axis2.AxisFault {
-        this("http://54.91.225.251:8888/PSEWebServices3/mainservices.asmx");
+        this(System.getenv("TINYPROXY_HOST")+"/PSEWebServices3/mainservices.asmx");
     }
 
     /**

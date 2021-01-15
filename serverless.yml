@@ -33,6 +33,16 @@ custom:
       basePath: 'ach'
       stage: prod
       createRoute53Record: true
+  privateKeyPassword:
+    # TODO: replace with your develop private key password
+    dev: <DEV_PRIVATE_KEY_PASSWORD>
+    # TODO: replace with your production private key password
+    prod: <PROD_PRIVATE_KEY_PASSWORD>
+  tinyproxyHost:
+    # TODO: replace with your tinyproxy develop url. eg: http://8.8.8.8:8888
+    dev: <DEV_TINYPROXY_PUBLIC_IP_AND_PORT>
+    # TODO: replace with your tinyproxy production url. eg: http://8.8.8.8:8888
+    prod: <DEV_TINYPROXY_PUBLIC_IP_AND_PORT>
   subnetIds:
     dev:
       # TODO: replace with your develop subnet id
@@ -53,6 +63,11 @@ functions:
     timeout: 28
     handler: com.financialomejor.ach.ACHLambdaHandler
     memorySize: 2048
+    environment:
+      TINYPROXY_HOST: ${self:custom.tinyproxyHost.${opt:stage,'dev'}}
+      # TODO: replace with your enterprise NIT
+      NIT: <YOUR_ENTERPRISE_NIT>
+      PRIVATE_KEY_PSSWD: ${self:custom.privateKeyPassword.${opt:stage,'dev'}}
     vpc:
       subnetIds: ${self:custom.subnetIds.${opt:stage,'dev'}}
       securityGroupIds: ${self:custom.securityGroupIds.${opt:stage,'dev'}}

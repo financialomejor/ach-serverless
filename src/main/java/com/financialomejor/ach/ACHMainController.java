@@ -3,8 +3,11 @@ package com.financialomejor.ach;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
@@ -51,14 +54,12 @@ public class ACHMainController {
 	/**
 	 * The PSE service consumption URL that targets the proxy
 	 */
-	// TODO: replace with your proxy URL
-	private String PSEURL = "YOUR_PROXY_URL/PSEWebServices3/MainServices.asmx";
+	private String PSEURL = System.getenv("TINYPROXY_HOST") +"/PSEWebServices3/MainServices.asmx";
 	
 	/**
 	 * The enterprise identifier (NIT)
 	 */
-	// TODO: replace with your PPE code
-	private String PPE_CODE = "YOUR_PPE_CODE"; // NIT
+	private String PPE_CODE = System.getenv("NIT"); // NIT
 	/**
 	 * The ACH service consumption code
 	 */
@@ -139,8 +140,31 @@ public class ACHMainController {
 		ctp_request.setFinancialInstitutionCode(transactionPayment.getBankCode());
 		ctp_request.setPaymentDescription(transactionPayment.getPaymentDescription());
 		ctp_request.setServiceCode(SERVICE_CODE);
-		Date date = Calendar.getInstance().getTime();
-		ctp_request.setSoliciteDate(date);
+		
+		TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
+
+		Calendar cSchedStartCal = Calendar.getInstance();
+		cSchedStartCal.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
+
+		int year = cSchedStartCal.get(Calendar.YEAR);
+		int month = cSchedStartCal.get(Calendar.MONTH)+1;
+		int day = cSchedStartCal.get(Calendar.DAY_OF_MONTH);
+		int hour = cSchedStartCal.get(Calendar.HOUR_OF_DAY);
+		int minutes = cSchedStartCal.get(Calendar.MINUTE);
+		int seconds = cSchedStartCal.get(Calendar.SECOND);
+		String dateString = "" + year + "-" +  (month<10?"0":"")+ month + "-"+(day<10?"0":"") + day + " " + (hour<10?"0":"") + hour + ":" + (minutes<10?"0":"") + minutes + ":" + (seconds<10?"0":"") +seconds + " -05:00";
+		System.out.println("La fechirri: " + dateString);  
+		
+		DateFormat date = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss X");  
+		Date nuevaDate = date.parse(dateString);
+		Date date2 = Calendar.getInstance().getTime();
+		System.out.println("Date to string: " + nuevaDate.toString()); 
+		System.out.println("Date2 to string: " + date2.toString()); 
+		//DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");  
+		//String strDate = dateFormat.format(date);  
+		//System.out.println("Converted String: " + strDate);  
+
+		ctp_request.setSoliciteDate(nuevaDate);
 		ctp_request.setTicketId(new NonNegativeInteger(transactionPayment.getTicketId()));
 		AmountType amount = new AmountType();
 		amount.setCurrencyISOcode(transactionPayment.getCurrency());
