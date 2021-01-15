@@ -96,6 +96,28 @@ Then right click the project folder and choose the <strong>"Run As > Spring Boot
 
 <strong> Be sure that the tinyproxy service running on the EC2 instance allows the connections from your IP.</strong>
 
+## Service routes
+
+You can test that your project is running by using the following command in your machine:
+
+```bash
+curl http://localhost/ach/test
+```
+
+The allowed routes by the service are the following:
+
+| Route                                    | Method | Description                                                |
+| ---------------------------------------- | ------ | ---------------------------------------------------------- | --- |
+| /ach/test                                | GET    | Testing route to check running service                     |
+| /ach/bank-list                           | GET    | Retrieves the bank list from the ACH servers               |
+| /ach/transaction-payment                 | POST   | Creates a new payment transaction                          |
+| /ach/transaction-information/{id}        | GET    | Retrieves the information for a given transaction          |
+| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |     |
+| /ach/finalize-transaction/{id}           | POST   | Ends a given transaction                                   |
+| /ach/transaction-information/detail/{id} | GET    | Retrieves the detailed information for a given transaction |     |
+
+<br/>
+
 ## Build
 
 After the project is configured, you need to install the dependencies and build the project. For this you need to execute the following command:
